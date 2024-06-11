@@ -1,17 +1,15 @@
-import type {Metadata} from "next";
 import {NextIntlClientProvider, useMessages} from 'next-intl';
 import {locales} from '../../../navigation';
 import "./globals.css";
 import {notFound} from "next/navigation";
+import React from "react";
+import {ThemeProvider} from "@/components/provider/ThemProvider";
 
-export const metadata: Metadata = {
-    title: "Thenextquant",
-    description: "Digital Currency Quantitative Development Kit for Professional Institutional Investors",
-};
+
 export default function RootLayout(
     {
-        children, params: { locale }
-    } : {
+        children, params: {locale}
+    }: {
         children: React.ReactNode,
         params: { locale: string }
     }
@@ -21,14 +19,27 @@ export default function RootLayout(
         notFound();
     }
     const messages = useMessages();
+
+    const fonts = locale === "en" ? "font-roboto-mono" : "font-noto-serif-sc";
     return (
         <html lang={locale}>
         <head>
-            <link rel="icon" href="./favicon.ico" type="image/png"/>
+            <title>Thenextquant</title>
+            <meta name="description"
+                  content="Digital Currency Quantitative Development Kit for Professional Institutional Investors"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <link rel="icon" href="favicon.ico"/>
         </head>
-        <body className="font-roboto-mono">
+        <body suppressHydrationWarning={true} className={fonts}>
         <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+            >
+                {children}
+            </ThemeProvider>
         </NextIntlClientProvider>
         </body>
         </html>

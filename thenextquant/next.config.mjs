@@ -4,7 +4,7 @@ import next_intl from "next-intl/plugin";
 const nextConfig = {
 };
 
-const withNextIntl = next_intl("./src/i18n.js");1
+const withNextIntl = next_intl("./src/i18n.js");
 
 export default withNextIntl(nextConfig);
 
