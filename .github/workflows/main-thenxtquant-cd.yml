@@ -31,14 +31,13 @@ jobs:
           node-version: '20'
     
       - name: Change directory to project
-        run: ls 
-        # cd thenextquant
+        run: cd ./thenextquant
             
-      # - name: Install dependencies
-      #   run: npm install
+      - name: Install dependencies
+        run: npm install
 
-      # - name: running the project
-      #   run: npm run dev
+      - name: running the project
+        run: npm run dev
 
       # - name: Deploy to Vercel
       
