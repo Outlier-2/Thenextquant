@@ -17,7 +17,6 @@ export default function LanguageSwitchButton() {
     const locale = useLocale();
     const router = useRouter();
     const pathname = usePathname();
-    console.log("locale:", locale, "router:", router, "pathname:", pathname);
 
     const handleChangeLocale = (newLocale) => {
         router.push(pathname, {locale: newLocale});

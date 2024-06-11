@@ -22,16 +22,16 @@ export default function RootLayout(
 
     const fonts = locale === "en" ? "font-roboto-mono" : "font-noto-serif-sc";
     return (
-        <html lang={locale}>
+        <html suppressHydrationWarning={true} lang={locale}>
         <head>
             <title>Thenextquant</title>
             <meta name="description"
                   content="Digital Currency Quantitative Development Kit for Professional Institutional Investors"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <link rel="icon" href="favicon.ico"/>
+            <link rel="icon" href="./favicon.ico"/>
         </head>
         <body suppressHydrationWarning={true} className={fonts}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider  locale={locale} messages={messages}>
             <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
