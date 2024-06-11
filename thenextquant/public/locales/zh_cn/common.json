@@ -1,9 +1,0 @@
-{
-  "components":{
-    "SubscribeFormModal":{
-      "onOK":{
-        "Welcome to React":"欢迎来到react"
-      }
-    }
-  }
-}
