@@ -29,6 +29,9 @@ jobs:
       #   uses: actions/setup-node@v3
       #   with:
       #     node-version: '20'
+
+      - name: seek file directory
+        run: ls
     
       - name: Change directory to project
         run: cd ./thenextquant
