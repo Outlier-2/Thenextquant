@@ -4,7 +4,12 @@ import "./globals.css";
 import {notFound} from "next/navigation";
 import React from "react";
 import {ThemeProvider} from "@/components/provider/ThemProvider";
+import {Metadata} from "next";
 
+export const metadata: Metadata = {
+    title: "Thenextquant",
+    description: "Digital Currency Quantitative Development Kit for Professional Institutional Investors",
+};
 
 export default function RootLayout(
     {
@@ -23,13 +28,6 @@ export default function RootLayout(
     const fonts = locale === "en" ? "font-roboto-mono" : "font-noto-serif-sc";
     return (
         <html suppressHydrationWarning={true} lang={locale}>
-        <head>
-            <title>Thenextquant</title>
-            <meta name="description"
-                  content="Digital Currency Quantitative Development Kit for Professional Institutional Investors"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <link rel="icon" href="./favicon.ico"/>
-        </head>
         <body suppressHydrationWarning={true} className={fonts}>
         <NextIntlClientProvider  locale={locale} messages={messages}>
             <ThemeProvider
