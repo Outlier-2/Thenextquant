@@ -1,0 +1,6 @@
+uvicorn
+fastapi
+pymongo
+colorlog
+uuid
+motor
