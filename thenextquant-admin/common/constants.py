@@ -6,13 +6,13 @@ from typing import Any, Dict, List
 from pydantic import BaseModel
 
 
-class Role:
+class Role(enum.Enum):
     USER = 1
     MEMBER = 2
     ADMINER = 3
 
 
-class StatusCode:
+class StatusCode(enum.Enum):
     SUCCESS = 200
     ERROR = 500
     DATA_NOT_FOUND = 400
@@ -21,10 +21,9 @@ class StatusCode:
     DATA_ERROR = 50
 
 
-class TimeInfo:
-    def __init__(self):
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+class TimeInfo(BaseModel):
+    created_at: datetime = datetime.now()  # 定义并初始化 created_at 字段
+    updated_at: datetime = datetime.now()  # 定义并初始化 updated_at 字段
 
     def update_time(self):
         self.updated_at = datetime.now()
@@ -48,3 +47,4 @@ class ResponseModel(BaseModel):
 # 定义数据库名称
 class CollectionName(enum.Enum):
     SYSTEM_CONFIG = "sys_config"
+    USER = "user"

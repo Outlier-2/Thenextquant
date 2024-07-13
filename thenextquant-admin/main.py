@@ -11,6 +11,7 @@ from fastapi import FastAPI
 from infrastructure.database.MongodbClient import MongoDBClient
 from interface.systemConfigAPI import system_config_router
 from config.logging.Logging import LoggingConfig
+from interface.userAPI import user_router
 
 
 # 测试过滤器链
@@ -56,5 +57,6 @@ async def shutdown_db_client():
     init_mongo().close()
 
 
-# 预设系统
-app.include_router(system_config_router, prefix="/system_config")
+# 路由
+app.include_router(system_config_router, prefix="/system_config", tags=["system_config"])
+app.include_router(user_router, prefix="/user", tags=["user"])
