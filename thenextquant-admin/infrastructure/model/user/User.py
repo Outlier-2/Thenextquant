@@ -32,7 +32,7 @@ class UserBase(BaseModel):
         arbitrary_types_allowed = True
 
     def update_to_memberUser(self):
-        self.role = Role.MEMBERUSER
+        self.role = Role.MEMBER
 
     def update_to_adminUser(self):
-        self.role = Role.ADMINUSER
+        self.role = Role.ADMINER

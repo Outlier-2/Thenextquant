@@ -1,13 +1,15 @@
 import datetime
+import enum
 from datetime import datetime
 from typing import Any, Dict, List
 
 from pydantic import BaseModel
 
+
 class Role:
     USER = 1
-    MEMBERUSER = 2
-    ADMINUSER = 3
+    MEMBER = 2
+    ADMINER = 3
 
 
 class StatusCode:
@@ -42,3 +44,7 @@ class ResponseModel(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
+
+# 定义数据库名称
+class CollectionName(enum.Enum):
+    SYSTEM_CONFIG = "sys_config"

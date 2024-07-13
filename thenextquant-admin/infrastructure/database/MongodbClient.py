@@ -1,14 +1,9 @@
 import os
-import logging
-import json
-from dotenv import load_dotenv
-from motor.motor_asyncio import (
-    AsyncIOMotorClient,
-    AsyncIOMotorDatabase,
-    AsyncIOMotorCollection,
-)
-from pymongo import errors
 from typing import Any, Dict, List
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase, AsyncIOMotorCollection
+from pymongo import errors
+from dotenv import load_dotenv
+from fastapi import HTTPException
 
 
 class MongoDBClient:
@@ -23,6 +18,13 @@ class MongoDBClient:
         self.client: AsyncIOMotorClient = None
         self.db: AsyncIOMotorDatabase = None
 
+    async def __aenter__(self):
+        await self.connect()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        self.client.close()
+
     async def connect(self):
         """
         建立与 MongoDB 的连接
@@ -33,7 +35,7 @@ class MongoDBClient:
             print(f"Connected to MongoDB database: {self.database_name}")
         except errors.ConnectionError as e:
             print(f"Could not connect to MongoDB: {e}")
-            raise
+            raise HTTPException(status_code=500, detail=f"Could not connect to MongoDB: {e}")
 
     async def get_database(self) -> AsyncIOMotorDatabase:
         """
@@ -41,9 +43,7 @@ class MongoDBClient:
         :return: 数据库对象
         """
         if self.db is None:
-            raise ConnectionError(
-                "Database connection is not established. Call connect() first."
-            )
+            raise HTTPException(status_code=500, detail="Database connection is not established. Call connect() first.")
         return self.db
 
     # Collection operations
@@ -71,9 +71,7 @@ class MongoDBClient:
         await self.db.drop_collection(collection_name)
 
     # Document operations
-    async def insert_document(
-        self, collection_name: str, document: Dict[str, Any]
-    ) -> Any:
+    async def insert_document(self, collection_name: str, document: Dict[str, Any]) -> Any:
         """
         插入文档到集合
         :param collection_name: 集合名称
@@ -81,14 +79,14 @@ class MongoDBClient:
         :return: 插入操作的结果
         """
         collection = await self.get_collection(collection_name)
-        print("插入的集合是:", collection_name)
-        result = await collection.insert_one(document)
-        print("插入成功")
-        return result
+        print("进入插")
+        try:
+            result = await collection.insert_one(document)
+            return result
+        except errors.PyMongoError as e:
+            raise HTTPException(status_code=500, detail=f"Failed to insert document: {e}")
 
-    async def find_documents(
-        self, collection_name: str, query: Dict[str, Any] = None
-    ) -> List[Dict[str, Any]]:
+    async def find_documents(self, collection_name: str, query: Dict[str, Any] = None) -> List[Dict[str, Any]]:
         """
         查询集合中的文档
         :param collection_name: 集合名称
@@ -98,12 +96,13 @@ class MongoDBClient:
         if query is None:
             query = {}
         collection = await self.get_collection(collection_name)
-        cursor = collection.find(query)
-        return await cursor.to_list(length=None)
+        try:
+            cursor = collection.find(query)
+            return await cursor.to_list(length=None)
+        except errors.PyMongoError as e:
+            raise HTTPException(status_code=500, detail=f"Failed to find documents: {e}")
 
-    async def update_document(
-        self, collection_name: str, query: Dict[str, Any], update: Dict[str, Any]
-    ):
+    async def update_document(self, collection_name: str, query: Dict[str, Any], update: Dict[str, Any]):
         """
         更新集合中的文档
         :param collection_name: 集合名称
@@ -112,7 +111,11 @@ class MongoDBClient:
         :return: 更新操作的结果
         """
         collection = await self.get_collection(collection_name)
-        return await collection.update_one(query, {"$set": update})
+        try:
+            result = await collection.update_one(query, {"$set": update})
+            return result
+        except errors.PyMongoError as e:
+            raise HTTPException(status_code=500, detail=f"Failed to update document: {e}")
 
     async def delete_document(self, collection_name: str, query: Dict[str, Any]):
         """
@@ -122,7 +125,13 @@ class MongoDBClient:
         :return: 删除操作的结果
         """
         collection = await self.get_collection(collection_name)
-        return await collection.delete_one(query)
+        try:
+            result = await collection.delete_one(query)
+            return result
+        except errors.PyMongoError as e:
+            raise HTTPException(status_code=500, detail=f"Failed to delete document: {e}")
+
+    # 示例用法
 
 
 load_dotenv()
