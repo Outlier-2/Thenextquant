@@ -1,11 +1,5 @@
 import logging
 import os
-from http.client import HTTPException
-
-from dotenv import load_dotenv
-from domain.rule_engine.chain.filterchain import FilterChain
-from domain.rule_engine.filter.abstract_filter import FilterA, FilterB
-# from infrastructure.database.MongodbClient import db, MongoDBClient
 from fastapi import FastAPI
 
 from infrastructure.database.MongodbClient import MongoDBClient
@@ -60,3 +54,8 @@ async def shutdown_db_client():
 # 路由
 app.include_router(system_config_router, prefix="/system_config", tags=["system_config"])
 app.include_router(user_router, prefix="/user", tags=["user"])
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
