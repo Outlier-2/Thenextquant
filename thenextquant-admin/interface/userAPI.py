@@ -29,7 +29,7 @@ async def create_user(user_base: UserBase):
 
             document = {**user_dict, **time}
             print(time)
-            # 在实际情况下，可以在这里进行用户验证、数据清洗等操作
+            # 在实际情况下，可以在这里进行用户验证、数据清洗等操作 等具体业务我们来构建不同的过滤器链路来完成
             result = await db_client.insert_document(CollectionName.USER.value, document)
             # inserted_id = str(ObjectId(result.inserted_id))
             response_data = {"inserted_id": str(result.inserted_id), "user": user_dict}
