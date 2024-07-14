@@ -1,45 +1,60 @@
-import {NextIntlClientProvider, useMessages} from 'next-intl';
-import {locales} from '../../../navigation';
+import { NextIntlClientProvider, useMessages } from "next-intl";
+import { locales } from "../../../navigation";
+import "@rainbow-me/rainbowkit/styles.css";
+import { SessionProvider } from "next-auth/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from "wagmi";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "./globals.css";
-import {notFound} from "next/navigation";
+import { notFound } from "next/navigation";
 import React from "react";
-import {ThemeProvider} from "@/components/provider/ThemProvider";
-import {Metadata} from "next";
+import { ThemeProvider } from "@/components/provider/ThemProvider";
+import { Metadata } from "next";
+import {
+  RainbowKitSiweNextAuthProvider,
+  GetSiweMessageOptions,
+} from "@rainbow-me/rainbowkit-siwe-next-auth";
+import WallectProvider from "@/components/provider/wallectProvider";
+
+const client = new QueryClient();
 
 export const metadata: Metadata = {
-    title: "Thenextquant",
-    description: "Digital Currency Quantitative Development Kit for Professional Institutional Investors",
+  title: "Thenextquant",
+  description:
+    "Digital Currency Quantitative Development Kit for Professional Institutional Investors",
 };
 
-export default function RootLayout(
-    {
-        children, params: {locale}
-    }: {
-        children: React.ReactNode,
-        params: { locale: string }
-    }
-) {
+export default function RootLayout({
+  children,
+  params: { locale },
+}: {
+  children: React.ReactNode;
+  params: { locale: string };
+}) {
+  const getSiweMessageOptions: GetSiweMessageOptions = () => ({
+    statement: "Sign in to my TheNextquant app",
+  });
 
-    if (!locales.includes(locale)) {
-        notFound();
-    }
-    const messages = useMessages();
+  if (!locales.includes(locale)) {
+    notFound();
+  }
+  const messages = useMessages();
 
-    const fonts = locale === "en" ? "font-roboto-mono" : "font-noto-serif-sc";
-    return (
-        <html suppressHydrationWarning={true} lang={locale}>
-        <body suppressHydrationWarning={true} className={fonts}>
-        <NextIntlClientProvider  locale={locale} messages={messages}>
-            <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-            >
-                {children}
-            </ThemeProvider>
+  const fonts = locale === "en" ? "font-roboto-mono" : "font-noto-serif-sc";
+  return (
+    <html suppressHydrationWarning={true} lang={locale}>
+      <body suppressHydrationWarning={true} className={fonts}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <WallectProvider>{children}</WallectProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
-        </body>
-        </html>
-    );
+      </body>
+    </html>
+  );
 }

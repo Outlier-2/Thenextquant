@@ -1,7 +1,15 @@
-// src/ContentForm.tsx
+
 import React, { useState } from 'react';
 import { ContentElement } from '@/type/ContentElement';
 import {contentTypes} from '@/app/[locale]/textEditor/type'
+import {
+    ToggleGroup,
+    ToggleGroupItem,
+} from "@/components/ui/toggle-group"
+
+interface ContentFormProps {
+    addContent: (content: ContentElement) => void;
+}
 
 interface ContentFormProps {
     addContent: (content: ContentElement) => void;
@@ -11,15 +19,15 @@ const ContentForm: React.FC<ContentFormProps> = ({ addContent }) => {
     const [contentType, setContentType] = useState<string>('p');
     const [contentData, setContentData] = useState<any>({});
 
-    const handleContentTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setContentType(event.target.value);
+    const handleContentTypeChange = (type: string) => {
+        setContentType(type);
         setContentData({});
     };
 
     const handleContentDataChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value, type } = event.target as HTMLInputElement;
-        const checked = type === 'checkbox' ? (event.target as HTMLInputElement).checked : undefined;
-        setContentData({ ...contentData, [name]: checked !== undefined ? checked : value });
+        const { name, value, type } = event.target;
+        const checked = event.target instanceof HTMLInputElement ? event.target.checked : undefined;
+        setContentData({ ...contentData, [name]: type === 'checkbox' ? checked : value });
     };
 
     const handleSubmit = (event: React.FormEvent) => {
@@ -29,50 +37,58 @@ const ContentForm: React.FC<ContentFormProps> = ({ addContent }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
             <div>
-                <label>Content Type:</label>
-                <select value={contentType} onChange={handleContentTypeChange}>
-                    {Object.keys(contentTypes).map(type => (
-                        <option key={type} value={type}>
-                            {type.replace('_', ' ')}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div>
-                {contentTypes[contentType].fields.map(field => (
-                    <div key={field.name}>
-                        <label>{field.name}:</label>
-                        {field.type === 'text' && (
-                            <input
-                                type="text"
-                                name={field.name}
-                                value={contentData[field.name] || ''}
-                                onChange={handleContentDataChange}
-                            />
-                        )}
-                        {field.type === 'textarea' && (
-                            <textarea
-                                name={field.name}
-                                value={contentData[field.name] || ''}
-                                onChange={handleContentDataChange}
-                            />
-                        )}
-                        {field.type === 'checkbox' && (
-                            <input
-                                type="checkbox"
-                                name={field.name}
-                                checked={contentData[field.name] || false}
-                                onChange={handleContentDataChange}
-                            />
-                        )}
-                    </div>
+                <ToggleGroup type="multiple" key="contentType">
+                {Object.keys(contentTypes).map(type => (
+                    <button key={type} onClick={() => handleContentTypeChange(type)}>
+                        <ToggleGroupItem value={type} aria-label="Toggle bold">
+                        {type.replace('_', ' ')}
+                        </ToggleGroupItem>
+                    </button>
                 ))}
+                </ToggleGroup>
             </div>
-            <button type="submit">Add Content</button>
-        </form>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    {contentTypes[contentType].fields.map(field => (
+                        <ToggleGroup type="multiple" key={field.name}>
+                            <ToggleGroupItem value="bold" aria-label="Toggle bold">
+                                <label>{field.name}:</label>
+                            </ToggleGroupItem>
+
+                            {field.type === 'text' && (
+                                <input
+                                    type="text"
+                                    name={field.name}
+                                    value={contentData[field.name] || ''}
+                                    onChange={handleContentDataChange}
+                                />
+                            )}
+                            {field.type === 'textarea' && (
+                                <textarea
+                                    name={field.name}
+                                    value={contentData[field.name] || ''}
+                                    onChange={handleContentDataChange}
+                                />
+                            )}
+                            {field.type === 'checkbox' && (
+                                <input
+                                    type="checkbox"
+                                    name={field.name}
+                                    checked={contentData[field.name] || false}
+                                    onChange={handleContentDataChange}
+                                />
+                            )}
+                        </ToggleGroup >
+                    ))}
+                </div>
+                <button type="submit">Add Content</button>
+            </form>
+        </div>
     );
 };
 
 export default ContentForm;
+
+

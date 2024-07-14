@@ -24,7 +24,7 @@ export default function LanguageSwitchButton() {
 
     return (
         <Select onValueChange={handleChangeLocale}>
-            <SelectTrigger className="w-[180px] h-auto">
+            <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder={defaultLanguage()}/>
             </SelectTrigger>
             <SelectContent>

@@ -1,4 +1,5 @@
 {
+  "Sign" : "登录",
   "components":{
     "SubscribeFormModal":{
       "onOK":{
