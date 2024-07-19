@@ -19,43 +19,12 @@ export default function Home() {
   return (
     <main>
       <Nav />
-      {/* <p>{t("中国")}</p>
-      <p>{test("Welcome to React")},</p>
-      <p>{test("test")}</p> */}
       <ContextMenuBackage />
       <Footer />
     </main>
   );
 }
 
-export function Nav() {
-  const t = useTranslations();
-  const router = useRouter();
-  return (
-    <div className="flex flex-row h-[6vh] justify-center items-center ">
-      <div className="basis-1/4">
-        <Link href="/" className="flex justify-center items-center  ">
-          <Image width={40} height={40} src="/thenextquant.png" alt="logo" />
-          <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight ">
-            TheNextQuant
-          </h3>
-        </Link>
-      </div>
-      <div className="basis-1/4">
-        <CommandDemo />
-      </div>
-      <div className="basis-1/2 flex flex-row justify-end items-center gap-x-3 mr-2">
-        <div className="flex-row flex gap-x-3 hidden md:flex">
-          <ModeToggle />
-          <LanguageSwitchButton />
-        </div>
-        <div>
-          <ConnectButton label={t("Sign")} />
-        </div>
-      </div>
-    </div>
-  );
-}
 function ResizableLeftRightLayout() {
   return (
     <ResizablePanelGroup
@@ -100,7 +69,7 @@ import {
 function ContextMenuBackage() {
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="flex h-auto w-full items-center justify-center rounded-md border border-dashed text-sm">
+      <ContextMenuTrigger className="flex h-auto w-full items-center justify-center rounded-md  border-dashed text-sm">
         <ResizableLeftRightLayout />
       </ContextMenuTrigger>
       <ContextMenuContent className="w-64">
@@ -149,44 +118,14 @@ function ContextMenuBackage() {
   );
 }
 
-import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
-} from "lucide-react";
-
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-
-export function CommandDemo() {
-  const t = useTranslations();
-  return (
-    <Command className="rounded-lg border shadow-md md:block hidden">
-      <CommandInput placeholder={t("temp not Support Search!")} />
-    </Command>
-  );
-}
-
 import { BookOpenText } from "lucide-react";
 import { PersonStanding } from "lucide-react";
+
 export function LeftMenu() {
   const t = useTranslations();
   const left_menu_button_items = [
     {
-      url: "url1",
+      url: "https://alfredorlandos-organization.gitbook.io/thenextquant/",
       name: "文档",
       icon: <BookOpenText />,
     },
@@ -209,7 +148,7 @@ export function LeftMenu() {
       </li>
     </div>
   ));
-  return <ul>{links}</ul>;
+  return <ul> {links}</ul>;
 }
 
 export function IndexRightContent() {
@@ -222,29 +161,81 @@ export function IndexRightContent() {
     // 5. 我们的优势
 
     <div className="flex h-auto flex-col gap-4 p-4">
+      <HeroSection />
+      <div className="flex">
+        <RichInterface />
+        <OutOfBox />
+        <FlexibleExtension />
+      </div>
+
       <div>
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          {t("什么是TheNextQuant ?")}
-        </h1>
-        <p className="mt-6 border-l-2 pl-6 italic">
-          {t("是投资机构都在使用的专业的量化工具包,利用他让你的智慧策略与收益想结合")}
-        </p>
         <br />
-        <div className="flex flex-col sm:flex-row">
+        <div
+          className="
+        flex justify-center"
+        >
+          <h2 className="scroll-m-10 text-2xl  tracking-tight lg:text-2xl">
+            {t("你的资产是否总是缩水?,在这里让我改变他！！")}
+          </h2>
+        </div>
+        <br />
+        <div className="flex flex-col sm:flex-row justify-center">
           <div>
-            <h2>{t("你资产的情况")}</h2>
-            <FakeChart data={declinechartData} />
+            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+              {t("你资产的情况")}
+            </h2>
+            <FakeChart data={declinechartData} info={declinedate} />
           </div>
-          <Image src="/arrow.gif" alt="arrow" width={200} height={100} unoptimized={true}></Image>
+          <Image
+            src="/arrow.gif"
+            alt="arrow"
+            width={200}
+            height={100}
+            unoptimized={true}
+          ></Image>
           <div>
-            <h2>{t("使用我们的框架")}</h2>
-            <FakeChart data={risechartData} />
+            <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+              {t("使用我们的框架")}
+            </h2>
+            <FakeChart data={risechartData} info={raisedate} />
           </div>
         </div>
       </div>
+      <AboutUS />
     </div>
   );
 }
+
+const HeroSection = () => {
+  const t = useTranslations("Index.Chart");
+  return (
+    <div className="flex flex-col items-center justify-center ">
+      <div className="h-[10vh]"></div>
+      <div className="flex justify-center flex-col items-center">
+        <img src="/thenextquant.png" alt="Logo" className="w-30 h-30 mb-8" />
+
+        <h2 className="scroll-m-20 text-4xl font-extrabold tracking-tigh mt-auto">
+          {t("什么是TheNextQuant ?")}
+        </h2>
+        <p className="mt-6 border-l-2 pl-6 italic">
+          {t(
+            "是投资机构都在使用的专业的量化工具包,利用他让你的智慧策略与收益相结合"
+          )}
+        </p>
+        <br></br>
+        <br></br>
+      </div>
+      <div className="flex space-x-4">
+        <button className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600">
+          快速开始
+        </button>
+        <button className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600">
+          成为会员
+        </button>
+      </div>
+    </div>
+  );
+};
 
 import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Dot, Line, LineChart } from "recharts";
@@ -263,6 +254,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { Nav } from "@/components/custom/product/Nav";
+import Footer from "@/components/custom/product/Footer";
+import { AboutUS } from "@/components/custom/atmo/AboutUS";
+import FlexibleExtension from "@/components/custom/atmo/FlexibleExtension";
+import OutOfBox from "@/components/custom/atmo/OutOfBox";
+import RichInterface from "@/components/custom/atmo/RichInterface";
+
 const declinechartData = [
   { browser: "chrome", visitors: 275, fill: "#1DC354" },
   { browser: "safari", visitors: 200, fill: "#1DC354" },
@@ -278,7 +276,14 @@ const risechartData = [
   { browser: "safari", visitors: 200, fill: "#1DC354" },
   { browser: "chrome", visitors: 275, fill: "#1DC354" },
 ];
-
+const declinedate = {
+  title: "资产下降",
+  info: "这个月降低了5%",
+};
+const raisedate = {
+  title: "资产上升",
+  info: "这个月上升了5%",
+};
 const chartConfig = {
   visitors: {
     label: "Assert",
@@ -286,12 +291,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function FakeChart({ data }) {
+export function FakeChart({ data, info }) {
+  const t = useTranslations("Index.Chart");
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Line Chart - Dots Colors</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{t(info.title)}</CardTitle>
+        <CardDescription>AlfredOrlando 2024</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -338,56 +344,12 @@ export function FakeChart({ data }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          {t(`${info.info}`)} <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          {t("展示这5个月的数据")}
         </div>
       </CardFooter>
     </Card>
-  );
-}
-
-import React from "react";
-
-function Footer() {
-  const t = useTranslations();
-  return (
-    <footer className="bg-gray-800 text-white py-8 w-full">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-between items-center">
-          {/* Logo */}
-          <div className="w-full flex items-center md:w-1/4 text-center md:text-left mb-4 md:mb-0">
-            <img
-              src="/thenextquant.png"
-              alt="Logo"
-              className="h-12 mx-auto md:mx-0"
-            />
-            <h1 className="text-lg">ThenextQuant</h1>
-          </div>
-
-          {/* 许可证 */}
-          <div className="w-full md:w-1/4 text-center mb-4 md:mb-0">
-            <Link href="/license">
-              <h2 className="text-lg font-semibold">{t("许可证")}</h2>
-            </Link>
-          </div>
-
-          {/* 关于我们 */}
-          <div className="w-full md:w-1/4 text-center mb-4 md:mb-0">
-            <Link href="/about">
-              <h2 className="text-lg font-semibold">{t("关于我们")}</h2>
-            </Link>
-          </div>
-
-          {/* 解释框架 */}
-          <div className="w-full md:w-1/4 text-center md:text-right">
-            <Link href="/">
-              <h2 className="text-lg font-semibold">{t("了解框架")}</h2>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </footer>
   );
 }
